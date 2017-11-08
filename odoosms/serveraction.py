@@ -36,14 +36,10 @@ class ServerAction(orm.Model):
         """ Override me in order to add new states in the server action. Please
         note that the added key length should not be higher than already-existing
         ones. """
-        return [('code', 'Execute Python Code'),
-                ('trigger', 'Trigger a Workflow Signal'),
-                ('client_action', 'Run a Client Action'),
-                ('object_create', 'Create or Copy a new Record'),
-                ('object_write', 'Write on a Record'),
-                ('multi', 'Execute several actions'),
-                ('sms', 'send sms')]
-
+        res = super(ServerAction, self)._get_states(cr, uid, context=context)
+        res.insert(0, ('sms', 'Send SMS'))
+        return res
+    
     _columns = {
                 'mobile': fields.char('Mobile'),
         'sms_server': fields.many2one('sms.smsclient', 'SMS Server',
